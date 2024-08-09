@@ -13,17 +13,17 @@ fetch(API_URL)
         //성공 후 실행 코드 및 함수
         //posts = data;
         posts = [...data];
-        renderPost();
+        renderPost(posts);
     })
     .catch((err) => {
         console.log(err);
     });
 
-function renderPost() {
+function renderPost(arrData) {
     const elePostList = document.querySelector('.post_list');
     elePostList.innerHTML = '';
 
-    for (let item of posts) {
+    for (let item of arrData) {
         const { title, body } = item;
         elePostList.innerHTML += `
         <!-- item[s] -->
@@ -48,11 +48,15 @@ function renderPost() {
 const eleSchKeyword = document.querySelector('#schKeyword');
 
 function onSearchHandler(e) {
-    const keyWord = e.target.value;
-    //console.log(keyWord);
+    const userInputKeyWord = e.target.value.trim().toLowerCase();
+    //console.log(userInputKeyWord);
 
-    /* posts.filter((item) => {
-        
-    });  */
+    const filteredData = posts.filter((item) => {
+        const changeTitleLower = item.title.toLowerCase();
+        //console.log(changeTitleLower);
+        return changeTitleLower.includes(userInputKeyWord);
+    });
+
+    renderPost(filteredData);
 }
 eleSchKeyword.addEventListener('keyup', onSearchHandler);

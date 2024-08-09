@@ -51,11 +51,24 @@ function onSearchHandler(e) {
     const userInputKeyWord = e.target.value.trim().toLowerCase();
     //console.log(userInputKeyWord);
 
-    const filteredData = posts.filter((item) => {
-        const changeTitleLower = item.title.toLowerCase();
-        //console.log(changeTitleLower);
-        return changeTitleLower.includes(userInputKeyWord);
-    });
+    function changeHighlight(text, query) {
+        if (!query) return text;
+        const regex = new RegExp(`(${query})`, 'gi');
+        return text.replace(regex, '<mark>$1</mark>');
+    }
+
+    const filteredData = posts
+        .filter((item) => {
+            const changeTitleLower = item.title.toLowerCase();
+            //console.log(changeTitleLower);
+            return changeTitleLower.includes(userInputKeyWord);
+        })
+        .map((item) => {
+            return {
+                ...item,
+                title: changeHighlight(item.title, userInputKeyWord),
+            };
+        });
 
     renderPost(filteredData);
 }

@@ -1,12 +1,11 @@
 //=======================================================================================
 document.addEventListener('DOMContentLoaded', () => {
-    const API_PATH = 'https://jsonplaceholder.typicode.com'; //1페지이 20개 요청
+    const API_PATH = 'https://jsonplaceholder.typicode.com';
     //const API_PATH = 'https://jsonplaceholder.typicode.com/posts?_page=1&_limit=20'; //1페지이 20개 요청
     //const API_PATH = 'https://jsonplaceholder.typicode.com/posts?title_like=sun'; //검색어 요청
 
     let currentPage = 1;
     let limit = 10;
-    //let isSearchedList = false;
     let searchKeyword = '';
 
     function loadPost() {
@@ -25,11 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .then((data) => {
                 console.log(data);
                 renderList(data);
-                /* if (isSearchedList) {
-                    document.querySelector('#moreBtn').style.display = 'none';
-                } else {
-                    document.querySelector('#moreBtn').style.display = 'inline-block';
-                } */
             })
             .catch((err) => {
                 console.error('ERROR : ', err);

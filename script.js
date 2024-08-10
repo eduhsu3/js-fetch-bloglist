@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     //const API_PATH = 'https://jsonplaceholder.typicode.com/posts?title_like=sun'; //검색어 요청
 
     let currentPage = 1;
+    let totalDataCount = 0;
+    let currentDataCount = 0;
     let limit = 10;
     let searchKeyword = '';
 
@@ -15,6 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(API_FULL_URL)
             .then((res) => {
                 //console.log(res);
+                totalDataCount = res.headers.get('X-Total-Count');
+                //console.log(total);
                 if (res.ok) {
                     return res.json();
                 } else {
@@ -23,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then((data) => {
                 console.log(data);
+                currentDataCount = data.length;
+
                 renderList(data);
             })
             .catch((err) => {
@@ -34,7 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderList(prmData) {
         const elePostContainer = document.querySelector('.post_container');
+        const eleTotalPostNum = document.querySelector('#totalPostNum');
+        const eleCurrentlPostNum = document.querySelector('#currentPostNum');
 
+        eleTotalPostNum.textContent = totalDataCount;
+        eleCurrentlPostNum.textContent = currentDataCount;
         elePostContainer.innerHTML = '';
 
         prmData.forEach((item, idx) => {

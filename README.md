@@ -20,26 +20,8 @@ fetch API 사용법 숙지
 
 
 ```javascript
-let posts = [];
-const API_URL = 'https://jsonplaceholder.typicode.com/posts';
-//데이터 가져오기
-fetch(API_URL)
-    .then((res) => {
-        if (res.ok) {
-            return res.json();
-        } else {
-            return Promise.reject('데이터를 가져올수없습니다.');
-        }
-    })
-    .then((data) => {
-        //성공 후 실행 코드 및 함수
-        //posts = data;
-        posts = [...data];
-        renderPost();
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+수정중
+
 ```
 
 <br>

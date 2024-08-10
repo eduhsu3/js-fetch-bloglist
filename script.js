@@ -1,33 +1,24 @@
 //=======================================================================================
 document.addEventListener('DOMContentLoaded', () => {
-    const API_URL = 'https://jsonplaceholder.typicode.com'; //1페지이 20개 요청
-    //const API_URL = 'https://jsonplaceholder.typicode.com/posts?_page=1&_limit=20'; //1페지이 20개 요청
-    //const API_URL = 'https://jsonplaceholder.typicode.com/posts?title_like=sun'; //검색어 요청
+    const API_PATH = 'https://jsonplaceholder.typicode.com'; //1페지이 20개 요청
+    //const API_PATH = 'https://jsonplaceholder.typicode.com/posts?_page=1&_limit=20'; //1페지이 20개 요청
+    //const API_PATH = 'https://jsonplaceholder.typicode.com/posts?title_like=sun'; //검색어 요청
 
     let currentPage = 1;
-    const limit = 10;
+    let limit = 10;
+    let isSearchedList = false;
+    let searchKeyword = '';
 
-    function searchLoadPost(prmKeyword) {
-        fetch(`${API_URL}/posts?title_like=${prmKeyword}`)
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                } else {
-                    return Promise.reject('데이터를 로딩중 장애발생');
-                }
-            })
-            .then((data) => {
-                document.querySelector('.post_container').innerHTML = '';
-                renderList(data);
-                console.log('검색결과', data);
-            })
-            .catch((err) => {
-                console.error('ERROR : ', err);
-            });
-    }
+    function loadPost() {
+        //console.log(limit);
+        let API_FULL_URL = '';
+        if (isSearchedList) {
+            API_FULL_URL = `${API_PATH}/posts?_limit=${limit}&title_like=${searchKeyword}`;
+        } else {
+            API_FULL_URL = `${API_PATH}/posts?_limit=${limit}`;
+        }
 
-    function loadPost(pageNum) {
-        fetch(`${API_URL}/posts?_page=${pageNum}&_limit=${limit}`)
+        fetch(API_FULL_URL)
             .then((res) => {
                 if (res.ok) {
                     return res.json();
@@ -38,16 +29,23 @@ document.addEventListener('DOMContentLoaded', () => {
             .then((data) => {
                 //console.log(data);
                 renderList(data);
+                /* if (isSearchedList) {
+                    document.querySelector('#moreBtn').style.display = 'none';
+                } else {
+                    document.querySelector('#moreBtn').style.display = 'inline-block';
+                } */
             })
             .catch((err) => {
                 console.error('ERROR : ', err);
             });
     }
     //초기로드
-    loadPost(currentPage);
+    loadPost();
 
     function renderList(prmData) {
         const elePostContainer = document.querySelector('.post_container');
+
+        elePostContainer.innerHTML = '';
 
         prmData.forEach((item, idx) => {
             const { title, body } = item;
@@ -71,22 +69,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    //=======================================================================================
+    //=================moreBtn======================================================================
     const eleMoreBtn = document.querySelector('#moreBtn');
     eleMoreBtn.addEventListener('click', () => {
-        currentPage++;
-        loadPost(currentPage);
+        limit += 10;
+        loadPost();
     });
 
-    //=======================================================================================
+    //=================search======================================================================
     const eleSchBtn = document.querySelector('#schBtn');
     const eleSchInput = document.querySelector('#schKeyword');
 
     function onSearchHandler(e) {
-        const userInputKeyWord = eleSchInput.value.trim();
-        //console.log(userInputKeyWord);
-
-        searchLoadPost(userInputKeyWord);
+        if (eleSchInput.value.trim() === '') {
+            isSearchedList = false;
+            loadPost();
+            return;
+        }
+        isSearchedList = true;
+        searchKeyword = eleSchInput.value.trim().toLowerCase();
+        loadPost();
 
         function changeHighlight(text, query) {
             if (!query) return text;

@@ -6,20 +6,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentPage = 1;
     let limit = 10;
-    let isSearchedList = false;
+    //let isSearchedList = false;
     let searchKeyword = '';
 
     function loadPost() {
-        //console.log(limit);
-        let API_FULL_URL = '';
-        if (isSearchedList) {
-            API_FULL_URL = `${API_PATH}/posts?_limit=${limit}&title_like=${searchKeyword}`;
-        } else {
-            API_FULL_URL = `${API_PATH}/posts?_limit=${limit}`;
-        }
+        console.log(limit);
+        let API_FULL_URL = `${API_PATH}/posts?_limit=${limit}&title_like=${searchKeyword}`;
 
         fetch(API_FULL_URL)
             .then((res) => {
+                //console.log(res);
                 if (res.ok) {
                     return res.json();
                 } else {
@@ -27,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             })
             .then((data) => {
-                //console.log(data);
+                console.log(data);
                 renderList(data);
                 /* if (isSearchedList) {
                     document.querySelector('#moreBtn').style.display = 'none';
@@ -48,7 +44,17 @@ document.addEventListener('DOMContentLoaded', () => {
         elePostContainer.innerHTML = '';
 
         prmData.forEach((item, idx) => {
-            const { title, body } = item;
+            let { title, body } = item;
+
+            function changeHighlight(text, query) {
+                if (!query) return text;
+                const regex = new RegExp(`(${query})`, 'gi');
+                return text.replace(regex, '<mark>$1</mark>');
+            }
+
+            if (searchKeyword !== '') {
+                title = changeHighlight(title, searchKeyword);
+            }
 
             const eleItem = document.createElement('div');
             eleItem.classList.add('item');
@@ -81,35 +87,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const eleSchInput = document.querySelector('#schKeyword');
 
     function onSearchHandler(e) {
-        if (eleSchInput.value.trim() === '') {
-            isSearchedList = false;
-            loadPost();
-            return;
-        }
-        isSearchedList = true;
+        limit = 10;
         searchKeyword = eleSchInput.value.trim().toLowerCase();
         loadPost();
-
-        function changeHighlight(text, query) {
-            if (!query) return text;
-            const regex = new RegExp(`(${query})`, 'gi');
-            return text.replace(regex, '<mark>$1</mark>');
-        }
-        /* 
-    const filteredData = posts
-        .filter((item) => {
-            const changeTitleLower = item.title.toLowerCase();
-            //console.log(changeTitleLower);
-            return changeTitleLower.includes(userInputKeyWord);
-        })
-        .map((item) => {
-            return {
-                ...item,
-                title: changeHighlight(item.title, userInputKeyWord),
-            };
-        }); */
-
-        //renderPost(filteredData);
     }
     eleSchBtn.addEventListener('click', onSearchHandler);
+
+    //=================search reset======================================================================
+    const eleSchResetBtn = document.querySelector('#schResetBtn');
+    eleSchResetBtn.addEventListener('click', () => {
+        eleSchInput.value = '';
+        searchKeyword = '';
+        limit = 10;
+        loadPost();
+    });
 });

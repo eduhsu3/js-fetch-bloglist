@@ -99,7 +99,16 @@ document.addEventListener('DOMContentLoaded', () => {
         searchKeyword = eleSchInput.value.trim().toLowerCase();
         loadPost();
     }
-    eleSchBtn.addEventListener('click', onSearchHandler);
+    eleSchBtn.addEventListener('click', function () {
+        if (eleSchInput.value !== '') {
+            onSearchHandler();
+        }
+    });
+    eleSchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && e.target.value !== '') {
+            onSearchHandler();
+        }
+    });
 
     //=================search reset======================================================================
     const eleSchResetBtn = document.querySelector('#schResetBtn');

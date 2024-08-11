@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const API_PATH = 'https://jsonplaceholder.typicode.com';
     //const API_PATH = 'https://jsonplaceholder.typicode.com/posts?_page=1&_limit=20'; //1페지이 20개 요청
     //const API_PATH = 'https://jsonplaceholder.typicode.com/posts?title_like=sun'; //검색어 요청
+    const eleBody = document.querySelector('body');
 
     let currentPage = 1;
     let totalDataCount = 0;
@@ -12,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadPost() {
         console.log(limit);
+        eleBody.classList.add('loading');
         let API_FULL_URL = `${API_PATH}/posts?_limit=${limit}&title_like=${searchKeyword}`;
 
         fetch(API_FULL_URL)
@@ -28,10 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
             .then((data) => {
                 console.log(data);
                 currentDataCount = data.length;
-
                 renderList(data);
+                eleBody.classList.remove('loading');
+                isLoadingSpinner = false;
             })
             .catch((err) => {
+                eleBody.classList.remove('loading');
                 console.error('ERROR : ', err);
             });
     }

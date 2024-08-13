@@ -76,7 +76,8 @@ main .post_container .item .item_bottom .date{}
 main .post_container .item .item_bottom .like{ flex-shrink: 0;}
 
 .bottom_btn{display: flex; justify-content: center; align-items: center; margin-top: 20px;}
-.bottom_btn #moreBtn{ height: auto;  border: none; color: #fff;  font-size: 18px; border-radius: 8px; background: #4d90fe; box-shadow: 0 3px 6px 0 rgba(0, 0, 0, .14); min-width: 200px; padding: 10px 20px;  font-family: "Noto Sans KR", sans-serif; cursor: pointer;}
+.bottom_btn #moreBtn,
+.bottom_btn #listGoBtn{ height: auto;  border: none; color: #fff;  font-size: 18px; border-radius: 8px; background: #4d90fe; box-shadow: 0 3px 6px 0 rgba(0, 0, 0, .14); min-width: 200px; padding: 10px 20px;  font-family: "Noto Sans KR", sans-serif; cursor: pointer;}
 
 
 /* footer */

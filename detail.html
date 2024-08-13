@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Blog 상세보기</title>
+        <link rel="stylesheet" href="css/style.css" />
+        <script type="module" src="js/detail.js" defer></script>
+    </head>
+    <!-- <body class="loading"> 초기에 JS에서 class add  -->
+    <body>
+        <div class="wrapper">
+            <div class="container">
+                <header>
+                    <h1>JSON Placeholder Fetch API</h1>
+                </header>
+                <main>
+                    <div class="detail_top">
+                        <h2 class="detail_title" id="detailTitle"></h2>
+                        <!-- <p>작성일, 작성자, 해당글의 코멘트 댓글</p> -->
+                    </div>
+                    <div class="detail_body">
+                        <p class="detail_body_txt" id="detailBodyTxt"></p>
+                    </div>
+                    <div class="bottom_btn">
+                        <button type="button" id="listGoBtn">목록</button>
+                    </div>
+                </main>
+                <footer>
+                    <p>푸터 내용을 넣습니다.</p>
+                </footer>
+            </div>
+        </div>
+        <!-- 로딩[s] -->
+        <div id="loadingSpinner">
+            <span class="txt">로딩중</span>
+            <span class="loader">
+                <i class="dot"></i>
+                <i class="dot"></i>
+                <i class="dot"></i>
+            </span>
+        </div>
+        <!-- 로딩[e] -->
+    </body>
+</html>

@@ -1,9 +1,10 @@
+import { loadingSpinner } from './common.js';
+
 //=======================================================================================
 document.addEventListener('DOMContentLoaded', () => {
     const API_PATH = 'https://jsonplaceholder.typicode.com';
     //const API_PATH = 'https://jsonplaceholder.typicode.com/posts?_page=1&_limit=20'; //1페지이 20개 요청
     //const API_PATH = 'https://jsonplaceholder.typicode.com/posts?title_like=sun'; //검색어 요청
-    const eleBody = document.querySelector('body');
 
     let currentPage = 1;
     let totalDataCount = 0;
@@ -13,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadPost() {
         console.log(limit);
-        eleBody.classList.add('loading');
+        loadingSpinner(true);
         let API_FULL_URL = `${API_PATH}/posts?_limit=${limit}&title_like=${searchKeyword}`;
 
         fetch(API_FULL_URL)
@@ -31,11 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(data);
                 currentDataCount = data.length;
                 renderList(data);
-                eleBody.classList.remove('loading');
-                isLoadingSpinner = false;
+                loadingSpinner(false);
             })
             .catch((err) => {
-                eleBody.classList.remove('loading');
+                loadingSpinner(false);
                 console.error('ERROR : ', err);
             });
     }
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         elePostContainer.innerHTML = '';
 
         prmData.forEach((item, idx) => {
-            let { title, body } = item;
+            let { id, title, body } = item;
 
             function changeHighlight(text, query) {
                 if (!query) return text;
@@ -64,11 +64,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 title = changeHighlight(title, searchKeyword);
             }
 
+            let queryString = `detail.html?postId=${id}`;
+
             const eleItem = document.createElement('div');
             eleItem.classList.add('item');
 
             eleItem.innerHTML += `
-            <a href="#">
+            <a href="${queryString}">
                 <div class="item_top">
                     <p class="title">${title}</p>
                     <p class="body">${body}</p>

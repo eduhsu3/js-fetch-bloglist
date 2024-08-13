@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadPost() {
         loadingSpinner(true);
-        let API_FULL_URL = `${API_PATH}/posts?id=${postId}`;
+        //let API_FULL_URL = `${API_PATH}/posts?id=${postId}`;  //이것은 배열 안에 객체 넣어서 반환
+        let API_FULL_URL = `${API_PATH}/posts/${postId}`; //이것은 해당 객체를 바로 반환
 
         fetch(API_FULL_URL)
             .then((res) => {
@@ -44,8 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const eleTitle = document.querySelector('#detailTitle');
         const eleDetailBodyTxt = document.querySelector('#detailBodyTxt');
 
-        eleTitle.textContent = prmData[0].title;
-        eleDetailBodyTxt.textContent = prmData[0].body;
+        eleTitle.textContent = prmData.title;
+        eleDetailBodyTxt.textContent = prmData.body;
     }
 
     document.querySelector('#listGoBtn').addEventListener('click', () => {
